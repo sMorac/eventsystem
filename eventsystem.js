@@ -13,7 +13,7 @@ EventSystem.prototype = {
         this._callbacks = (typeof this._callbacks !== 'undefined')? this._callbacks: {};
         var event_callbacks = this._callbacks[event];
         if(event_callbacks == undefined) return;
-        for(var i = 0; i < event_callbacks.length;i++){
+        for (var i=event_callbacks.length-1; i>=0; i--){
             if(event_callbacks[i] == callback){
                 event_callbacks.splice(i,1);
                 break;
@@ -22,12 +22,10 @@ EventSystem.prototype = {
     }, 
     emit: function(event,args){ // Event emitter
         this._callbacks = (typeof this._callbacks !== 'undefined')? this._callbacks: {};
-        if(this._callbacks[event] != undefined){
-            var event_callbacks = this._callbacks[event];
-            for(var i = 0; i < event_callbacks.length; i++){
-                event_callbacks[i].apply(this, Array.prototype.slice.call(arguments, 1));
-            }
-        }
+        var event_callbacks = this._callbacks[event];
+        if(event_callbacks == undefined) return; 
+        for (var i=event_callbacks.length-1; i>=0; i--)
+            event_callbacks[i].apply(this, Array.prototype.slice.call(arguments, 1));
     },
 };
 // Export for CommonJs
